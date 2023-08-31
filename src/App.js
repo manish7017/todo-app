@@ -1,23 +1,42 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import "./App.css";
 
 function App() {
+  const [todos, setTodos] = useState([]);
+  const [inputValue, setInputValue] = useState("");
+
+  const addTodo = () => {
+    if (inputValue.trim() === "") return;
+    const newTodo = { id: Date.now(), text: inputValue };
+    setTodos([...todos, newTodo]);
+    setInputValue("");
+  };
+
+  const deleteTodo = (id) => {
+    const updatedTodos = todos.filter((todo) => todo.id !== id);
+    setTodos(updatedTodos);
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>To-Do List</h1>
+      <div>
+        <input
+          type="text"
+          placeholder="Enter a new task"
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+        />
+        <button onClick={addTodo}>Add</button>
+      </div>
+      <ul>
+        {todos.map((todo) => (
+          <li key={todo.id}>
+            {todo.text}
+            <button onClick={() => deleteTodo(todo.id)}>Delete</button>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
